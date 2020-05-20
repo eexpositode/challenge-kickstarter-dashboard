@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">KickstarterDashboard</string>
+
+    <!-- User friendly error messages -->
+    <string name="project_list_is_null_exception">No projects found</string>
+    <string name="json_parsing_error_title">Error parsing data from response</string>
+    <string name="unknown_error_message">Unknown error</string>
+
+    <string name="dialog_positive_button">OK</string>
+    <string name="dialog_negative_button">Cancel</string>
+</resources>
