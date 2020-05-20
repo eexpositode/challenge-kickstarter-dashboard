@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorSurface">
+
+    <TextView
+        android:id="@+id/projectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        tools:text="Polygons | The Flat 4-in-1 Measuring Spoon"
+        style="@style/Text.OnSurface.Header"/>
+
+    <TextView
+        android:id="@+id/projectPledge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        tools:text="$577844"
+        style="@style/Text.OnSurface.Paragraph" />
+
+    <TextView
+        android:id="@+id/projectBackers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        tools:text="74405"
+        style="@style/Text.OnSurface.Paragraph"  />
+
+    <TextView
+        android:id="@+id/projectDaysLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        tools:text="21"
+        style="@style/Text.OnSurface.Paragraph" />
+</LinearLayout>

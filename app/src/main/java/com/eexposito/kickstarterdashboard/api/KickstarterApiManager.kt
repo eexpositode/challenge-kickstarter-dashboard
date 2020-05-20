@@ -1,10 +1,11 @@
-package com.eexposito.kickstarterdashboard
+package com.eexposito.kickstarterdashboard.api
 
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.eexposito.kickstarterdashboard.helpers.AppException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.reactivex.rxjava3.core.Observable

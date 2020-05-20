@@ -1,8 +1,9 @@
-package com.eexposito.kickstarterdashboard
+package com.eexposito.kickstarterdashboard.helpers
 
 import android.content.Context
 import androidx.annotation.StringRes
 import com.android.volley.VolleyError
+import com.eexposito.kickstarterdashboard.R
 import com.squareup.moshi.JsonDataException
 
 sealed class AppException(
@@ -32,7 +33,13 @@ sealed class AppException(
 
 fun Throwable.toAppException() = when (this) {
     is AppException -> this
-    is JsonDataException -> AppException.JSONParseException(this)
-    is VolleyError -> AppException.VolleyException(this)
-    else -> AppException.UnknownException(this)
+    is JsonDataException -> AppException.JSONParseException(
+        this
+    )
+    is VolleyError -> AppException.VolleyException(
+        this
+    )
+    else -> AppException.UnknownException(
+        this
+    )
 }

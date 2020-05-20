@@ -1,10 +1,16 @@
-package com.eexposito.kickstarterdashboard
+package com.eexposito.kickstarterdashboard.helpers
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import com.eexposito.kickstarterdashboard.R
 
 fun createInfoDialog(context: Context, titleId: Int?, messageId: Int, positiveAction: () -> Unit = {}) =
-    createInfoDialog(context, titleId, context.getString(messageId), positiveAction)
+    createInfoDialog(
+        context,
+        titleId,
+        context.getString(messageId),
+        positiveAction
+    )
 
 fun createInfoDialog(context: Context, titleId: Int?, message: String, positiveAction: () -> Unit = {}) =
     AlertDialog.Builder(context).apply {

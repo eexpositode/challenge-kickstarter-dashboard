@@ -1,8 +1,7 @@
-package com.eexposito.kickstarterdashboard
+package com.eexposito.kickstarterdashboard.api
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.ToJson
 
 @JsonClass(generateAdapter = true)
 data class Project(

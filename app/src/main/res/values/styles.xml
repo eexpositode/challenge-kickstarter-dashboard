@@ -15,4 +15,18 @@
         <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorOnError">@color/colorOnError</item>
     </style>
+
+    <style name="Text"/>
+    <style name="Text.OnSurface">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+    <style name="Text.OnSurface.Header">
+        <item name="android:textSize">@dimen/text_header</item>
+    </style>
+    <style name="Text.OnSurface.SubHeader">
+        <item name="android:textSize">@dimen/text_sub_header</item>
+    </style>
+    <style name="Text.OnSurface.Paragraph">
+        <item name="android:textSize">@dimen/text_paragraph</item>
+    </style>
 </resources>

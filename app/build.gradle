@@ -47,6 +47,8 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
     // Moshi for JSON to POJO parsing
     implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
     // ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
