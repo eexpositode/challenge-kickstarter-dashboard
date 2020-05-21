@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Project(
+data class ProjectApiModel(
     @Json(name = "s.no")
     var sNo: Int,
     @Json(name = "amt.pledged")

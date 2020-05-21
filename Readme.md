@@ -12,7 +12,8 @@ The goal is to develop a pseudo Mobile application(Android/iOS) which would list
 #### Plus Points
 - [x] Implement a Search project by name​, filter by “No. of Backers”,  and Sort by time or alphabetically.
 - [ ] Implement paging ​to display the results properly.
-- [ ] Cache all the API response in local storage and implement Infinite Scroll. Fetch listings in sets of 20. When end is reached fetch another set from the local storage automatically.
+- [x] Cache all the API response in local storage and implement Infinite Scroll. 
+- [ ] Fetch listings in sets of 20. When end is reached fetch another set from the local storage automatically.
 - [x] Custom design, font and icons to make app more user ­friendly.
 - [ ] You may add portfolio ​activity comprising awesome work you have done in Android/iOS.
 - [x] Use your imagination and add features which would make things easier for end users.
@@ -46,3 +47,4 @@ The goal is to develop a pseudo Mobile application(Android/iOS) which would list
 * [Timber](https://github.com/JakeWharton/timber) - A logger with a small, extensible API which provides utility on top of Android's normal Log class
 * [Koin](https://insert-koin.io/) - A pragmatic lightweight dependency injection framework for Kotlin
 * [Klock](https://github.com/korlibs/klock) - Date & Time library
+* [Room](https://developer.android.com/topic/libraries/architecture/room) - Persistency library

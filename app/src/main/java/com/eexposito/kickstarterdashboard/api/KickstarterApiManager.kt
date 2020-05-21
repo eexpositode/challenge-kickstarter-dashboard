@@ -9,7 +9,7 @@ import com.eexposito.kickstarterdashboard.helpers.API_URL
 import com.eexposito.kickstarterdashboard.helpers.AppException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.Observable
 import org.json.JSONArray
 
 class KickstarterApiManager(context: Context) {
@@ -32,7 +32,7 @@ class KickstarterApiManager(context: Context) {
     private fun parseJsonToPOJO(jsonResponse: JSONArray) = Moshi
         .Builder()
         .build()
-        .adapter<List<Project>>(Types.newParameterizedType(List::class.java, Project::class.java))
+        .adapter<List<ProjectApiModel>>(Types.newParameterizedType(List::class.java, ProjectApiModel::class.java))
         //TODO Use nullSafe() or notNull() to avoid nullable results?
         .fromJson(jsonResponse.toString())
         ?: throw AppException.ProjectListIsNullException

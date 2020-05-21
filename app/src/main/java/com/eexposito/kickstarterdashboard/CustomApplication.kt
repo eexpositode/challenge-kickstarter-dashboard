@@ -2,6 +2,8 @@ package com.eexposito.kickstarterdashboard
 
 import android.app.Application
 import com.eexposito.kickstarterdashboard.helpers.appModule
+import com.eexposito.kickstarterdashboard.helpers.persistenceModule
+import com.facebook.stetho.Stetho
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,11 +19,12 @@ class CustomApplication : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
+            Stetho.initializeWithDefaults(this)
         }
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@CustomApplication)
-            modules(listOf(appModule))
+            modules(listOf(appModule, persistenceModule))
         }
     }
 

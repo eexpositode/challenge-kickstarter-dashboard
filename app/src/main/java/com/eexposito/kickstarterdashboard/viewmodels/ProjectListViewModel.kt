@@ -2,17 +2,17 @@ package com.eexposito.kickstarterdashboard.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
-import com.eexposito.kickstarterdashboard.api.KickstarterApiManager
 import com.eexposito.kickstarterdashboard.helpers.toAppException
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Maybe
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.processors.BehaviorProcessor
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.eexposito.kickstarterdashboard.repositories.ProjectRepository
+import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiManager) : ViewModel() {
+class ProjectListViewModel(private val projectRepository: ProjectRepository) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     private val projectListPublisher: BehaviorProcessor<ProjectListViewState> by lazy {
@@ -24,8 +24,8 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
         .doOnSubscribe { ProjectListViewState.LoadingState }
         .toLiveData()
 
-    fun fetchProjectList() = kickstarterApiManager
-        .fetchProjectList()
+    fun fetchProjectList() = projectRepository
+        .getProjects()
         .subscribeOn(Schedulers.io())
         .doOnSubscribe { projectListPublisher.onNext(ProjectListViewState.LoadingState) }
         .subscribe(
@@ -49,8 +49,8 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
 
     fun sortProjectList(sortMethod: SortMethod) = projectListPublisher
         .subscribeOn(Schedulers.io())
-        .firstOrError()
         .ofType(ProjectListViewState.DataState::class.java)
+        .firstOrError()
         .map<ProjectListViewState> {
             when (sortMethod) {
                 SortMethod.BY_TITLE -> it.sortByTitle()
@@ -60,7 +60,7 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
         .doFinally { isSortingAscending = !isSortingAscending }
         .doOnError { Timber.e(it) }
         .onErrorResumeNext { error: Throwable ->
-            Maybe.just(ProjectListViewState.ErrorState(error.toAppException()))
+            Single.just(ProjectListViewState.ErrorState(error.toAppException()))
         }
         .toFlowable()
         .toLiveData()
@@ -89,16 +89,16 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
 
     private fun filterProjectListByBackersRange(comparison: (Int) -> Boolean) =
         projectListPublisher
-            .firstOrError()
             .ofType(ProjectListViewState.DataState::class.java)
+            .firstOrError()
             .map<ProjectListViewState> { dataState ->
                 ProjectListViewState.DataState(dataState.projects.filter { projectItem ->
-                    projectItem.backers.toIntOrNull()?.let { comparison(it) } ?: false
+                    comparison(projectItem.backers)
                 })
             }
             .doOnError { Timber.e(it) }
             .onErrorResumeNext { error: Throwable ->
-                Maybe.just(ProjectListViewState.ErrorState(error.toAppException()))
+                Single.just(ProjectListViewState.ErrorState(error.toAppException()))
             }
             .toFlowable()
 

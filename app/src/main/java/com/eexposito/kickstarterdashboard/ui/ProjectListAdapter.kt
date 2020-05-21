@@ -53,7 +53,7 @@ class ProjectListAdapter(
             view.apply {
                 projectTitle.text = item.title
                 projectPledge.text = item.pledge
-                projectBackers.text = item.backers
+                projectBackers.text = item.backersToDisplay
                 projectDaysLeft.text = item.daysLeft
                 tag = item
                 setOnClickListener(listener)
