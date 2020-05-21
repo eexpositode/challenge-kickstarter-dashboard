@@ -3,6 +3,7 @@ package com.eexposito.kickstarterdashboard.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -58,6 +59,17 @@ class MainActivity :
             actionSearchMenuItem.isVisible = true
         }
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.actionSearch -> true
+        R.id.actionSortAlphabetically -> {
+            true
+        }
+        R.id.actionSortByTime -> {
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

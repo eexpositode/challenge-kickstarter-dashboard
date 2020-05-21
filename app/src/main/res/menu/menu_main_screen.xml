@@ -9,4 +9,23 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:iconTint="@color/colorOnPrimary"
         app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/ic_sort_black_24dp"
+        android:orderInCategory="101"
+        android:title="@string/action_sort"
+        app:iconTint="@color/colorOnPrimary"
+        app:showAsAction="ifRoom">
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/actionSortAlphabetically"
+                android:icon="@drawable/ic_sort_alphabetically_black_24dp"
+                android:title="@string/action_sort_alphabetically" />
+            <item
+                android:id="@+id/actionSortByTime"
+                android:icon="@drawable/ic_sort_by_date_black_24dp"
+                android:title="@string/action_sort_remain_time" />
+        </menu>
+    </item>
 </menu>

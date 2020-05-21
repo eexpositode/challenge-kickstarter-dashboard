@@ -11,9 +11,12 @@
 
     <string name="project_item_pledge_label">Pledge</string>
     <string name="project_item_backers_label">Backers</string>
-    <string name="project_item_days_left_label">No. of days to go</string>
+    <string name="project_item_days_left_label">Days left</string>
 
     <!--  Menu actions -->
     <string name="action_search">Search</string>
     <string name="search_project_hint">Project title</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_sort_alphabetically">Sort alphabetically</string>
+    <string name="action_sort_remain_time">Sort by time</string>
 </resources>

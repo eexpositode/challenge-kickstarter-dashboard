@@ -28,7 +28,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/projectPledge"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Polygons | The Flat 4-in-1 Measuring Spoon"/>
+                tools:text="Polygons | The Flat 4-in-1 Measuring Spoon" />
 
             <TextView
                 android:id="@+id/projectPledgeLabel"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="@+id/projectPledgeLabel"
-                app:layout_constraintStart_toEndOf="@+id/projectPledgeLabel"
+                app:layout_constraintEnd_toStartOf="@+id/projectGuideline"
                 app:layout_constraintTop_toTopOf="@+id/projectPledgeLabel"
                 tools:text="$577844" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="@+id/projectBackersLabel"
-                app:layout_constraintStart_toEndOf="@+id/projectBackersLabel"
+                app:layout_constraintEnd_toStartOf="@+id/projectGuideline"
                 app:layout_constraintTop_toTopOf="@+id/projectBackersLabel"
                 tools:text="74405" />
 
@@ -77,10 +77,10 @@
                 style="@style/Text.OnSurface.Paragraph.Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/project_item_days_left_label"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/projectBackers"
-                android:text="@string/project_item_days_left_label" />
+                app:layout_constraintTop_toBottomOf="@+id/projectBackers" />
 
             <TextView
                 android:id="@+id/projectDaysLeft"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="@+id/projectDaysLeftLabel"
-                app:layout_constraintStart_toEndOf="@+id/projectDaysLeftLabel"
+                app:layout_constraintEnd_toStartOf="@+id/projectGuideline"
                 app:layout_constraintTop_toTopOf="@+id/projectDaysLeftLabel"
                 tools:text="21" />
 
@@ -98,10 +98,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_right_black_24dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:tint="@color/colorTextSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:tint="@color/colorOnSurface"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/projectGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
