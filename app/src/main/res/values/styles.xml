@@ -29,6 +29,10 @@
     <style name="Text.OnSurface.SubHeader">
         <item name="android:textSize">@dimen/text_sub_header</item>
     </style>
+    <style name="Text.OnSurface.Action" parent="Text.OnSurface.SubHeader">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
     <style name="Text.OnSurface.Paragraph">
         <item name="android:textSize">@dimen/text_paragraph</item>
     </style>

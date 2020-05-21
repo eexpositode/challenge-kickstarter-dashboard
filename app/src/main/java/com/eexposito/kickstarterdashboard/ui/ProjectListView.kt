@@ -6,7 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eexposito.kickstarterdashboard.ui.delegates.search.SearchClientComponent
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
-import kotlinx.android.synthetic.main.project_list_view.view.*
+import kotlinx.android.synthetic.main.view_project_list.view.*
 
 class ProjectListView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

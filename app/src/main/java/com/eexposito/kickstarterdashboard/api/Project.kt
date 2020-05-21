@@ -24,7 +24,7 @@ data class Project(
     @Json(name = "percentage.funded")
     var percentageFunded: Int,
     @Json(name = "num.backers")
-    var numBackers: String,
+    var numBackers: String, //TODO This has to be an Int. Use custom adapter with moshi
     @Json(name = "state")
     var state: String,
     @Json(name = "title")

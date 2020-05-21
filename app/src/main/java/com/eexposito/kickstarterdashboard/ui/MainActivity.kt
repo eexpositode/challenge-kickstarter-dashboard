@@ -8,9 +8,9 @@ import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.eexposito.kickstarterdashboard.R
-import com.eexposito.kickstarterdashboard.helpers.AppException
 import com.eexposito.kickstarterdashboard.helpers.CustomTabsDelegate
 import com.eexposito.kickstarterdashboard.helpers.createInfoDialog
 import com.eexposito.kickstarterdashboard.helpers.setColorResId
@@ -19,6 +19,7 @@ import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewModel
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewState
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_input_int_range.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity :
@@ -69,16 +70,42 @@ class MainActivity :
         R.id.actionSearch -> true
         R.id.actionSortAlphabetically -> {
             projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TITLE)
+                .observe(this@MainActivity, Observer { renderProjectList(it) })
             true
         }
         R.id.actionSortByTime -> {
             projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TIME_LEFT)
+                .observe(this@MainActivity, Observer { renderProjectList(it) })
             true
         }
         R.id.actionFilterByBackers -> {
+            switchInputFilterWidgetVisibility()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    fun onFilterButtonClick(view: View) {
+        if (fromInputText.text.isBlank())
+            return
+        if (toInputText.text.isBlank())
+            return
+        projectListViewModel.filterProjectListByBackersRange(
+            fromInputText.text.toString().toInt()..toInputText.text.toString().toInt()
+        ).observe(this@MainActivity, Observer { renderProjectList(it) })
+    }
+
+    private fun switchInputFilterWidgetVisibility() {
+        if (projectListInputFilter.isVisible) {
+            projectListViewModel.filterProjectListByBackersRange().observe(
+                this@MainActivity, Observer { renderProjectList(it) }
+            )
+            projectListInputFilter.visibility = View.GONE
+        } else {
+            projectListInputFilter.visibility = View.VISIBLE
+            fromInputText.text = null
+            toInputText.text = null
+        }
     }
 
     override fun onBackPressed() {
@@ -99,7 +126,8 @@ class MainActivity :
         is ProjectListViewState.ErrorState -> displayErrorDialog(viewState)
     }
 
-    private fun renderLoadingState(state: ProjectListViewState.LoadingState) = updateViewsVisibility(state)
+    private fun renderLoadingState(state: ProjectListViewState.LoadingState) =
+        updateViewsVisibility(state)
 
     private fun updateProjectList(state: ProjectListViewState.DataState) {
         updateViewsVisibility(state)
@@ -111,7 +139,7 @@ class MainActivity :
             context = this,
             titleId = state.error.titleResId,
             message = state.error.getErrorMessage(this),
-            positiveAction = { updateViewsVisibility(state)}
+            positiveAction = { updateViewsVisibility(state) }
         ).show()
     }
 

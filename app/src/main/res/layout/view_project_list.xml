@@ -10,5 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/project_item_view" />
+        tools:listitem="@layout/view_project_item" />
 </com.eexposito.kickstarterdashboard.ui.ProjectListView>

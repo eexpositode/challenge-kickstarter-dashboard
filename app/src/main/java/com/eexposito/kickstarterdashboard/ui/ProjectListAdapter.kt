@@ -8,7 +8,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.eexposito.kickstarterdashboard.R
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
-import kotlinx.android.synthetic.main.project_item_view.view.*
+import kotlinx.android.synthetic.main.view_project_item.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [ProjectItem] and makes a call to the
@@ -28,7 +28,7 @@ class ProjectListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ProjectItemViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.project_item_view, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.view_project_item, parent, false)
     )
 
     override fun onBindViewHolder(holder: ProjectItemViewHolder, position: Int) {
