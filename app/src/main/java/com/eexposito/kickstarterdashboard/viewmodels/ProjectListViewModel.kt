@@ -80,7 +80,7 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
             if (range == null)
                 projectListPublisher
             else
-                filterProjectListByBackersRange(range!!)
+                filterProjectListByBackersRange(range)
         }
         .subscribeOn(Schedulers.io())
         .toLiveData()

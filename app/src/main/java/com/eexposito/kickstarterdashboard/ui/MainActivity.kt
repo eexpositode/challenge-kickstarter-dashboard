@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.eexposito.kickstarterdashboard.R
 import com.eexposito.kickstarterdashboard.helpers.CustomTabsDelegate
 import com.eexposito.kickstarterdashboard.helpers.createInfoDialog
+import com.eexposito.kickstarterdashboard.helpers.forceSoftKeyboardHiding
 import com.eexposito.kickstarterdashboard.helpers.setColorResId
 import com.eexposito.kickstarterdashboard.ui.delegates.search.SearchHostMediatorActivity
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
@@ -149,9 +150,11 @@ class MainActivity :
     }
 
     override fun onVisibilityChange(isVisible: Boolean) {
-        if (!isVisible)
+        if (!isVisible) {
             projectListViewModel.filterProjectListByBackersRange().observe(
                 this@MainActivity, Observer { renderProjectList(it) }
             )
+            forceSoftKeyboardHiding()
+        }
     }
 }
