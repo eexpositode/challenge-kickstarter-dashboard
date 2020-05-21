@@ -15,6 +15,7 @@ sealed class AppException(
     @StringRes private val messageResId: Int? = null
 ) : Throwable() {
 
+    data class ConstraintViolationException(override val message: String) : AppException()
     object ProjectListIsNullException : AppException(
         messageResId = R.string.project_list_is_null_exception
     )

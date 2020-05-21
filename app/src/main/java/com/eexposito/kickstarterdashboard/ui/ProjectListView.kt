@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.eexposito.kickstarterdashboard.ui.delegates.search.SearchClientComponent
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
 import kotlinx.android.synthetic.main.project_list_view.view.*
 
 class ProjectListView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : ConstraintLayout(context, attrs, defStyleAttr), SearchClientComponent {
 
     interface OnProjectItemInteractionListener {
         fun onProjectItemInteraction(item: ProjectItem)
@@ -31,5 +32,9 @@ class ProjectListView @JvmOverloads constructor(
         if (projectListAdapter == null)
             throw RuntimeException("Bind needs to be called to instantiate the adapter")
         projectListAdapter!!.updateData(projectList)
+    }
+
+    override fun onSearchRequested(query: String) {
+        projectListAdapter?.filter(query)
     }
 }
