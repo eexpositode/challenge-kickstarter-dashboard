@@ -6,6 +6,9 @@ import com.android.volley.VolleyError
 import com.eexposito.kickstarterdashboard.R
 import com.squareup.moshi.JsonDataException
 
+const val API_URL = "http://starlord.hackerearth.com/kickstarter"
+const val PROJECT_URL_PREFIX = "https://www.kickstarter.com"
+
 sealed class AppException(
     private val error: Throwable? = null,
     @StringRes val titleResId: Int? = null,
