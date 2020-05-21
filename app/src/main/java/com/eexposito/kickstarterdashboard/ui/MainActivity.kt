@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -40,7 +41,10 @@ class MainActivity :
             )
         }
         (projectListView as? ProjectListView)?.bind(this)
-        projectListViewModel.fetchProjectList.observe(this, Observer { renderProjectList(it) })
+        projectListViewModel.run {
+            fetchProjectList()
+            projectList.observe(this@MainActivity, Observer { renderProjectList(it) })
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -69,6 +73,9 @@ class MainActivity :
         R.id.actionSortByTime -> {
             true
         }
+        R.id.actionFilterByBackers -> {
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -84,21 +91,43 @@ class MainActivity :
         super.onPause()
     }
 
-    private fun renderProjectList(projectList: ProjectListViewState) = when (projectList) {
-        is ProjectListViewState.DataState -> updateProjectList(projectList.projects)
-        is ProjectListViewState.ErrorState -> displayErrorDialog(projectList.error)
+    private fun renderProjectList(viewState: ProjectListViewState) = when (viewState) {
+        is ProjectListViewState.LoadingState -> renderLoadingState(viewState)
+        is ProjectListViewState.DataState -> updateProjectList(viewState)
+        is ProjectListViewState.ErrorState -> displayErrorDialog(viewState)
     }
 
-    private fun updateProjectList(projectList: List<ProjectItem>) {
-        (projectListView as? ProjectListView)?.updateList(projectList)
+    private fun renderLoadingState(state: ProjectListViewState.LoadingState) = updateViewsVisibility(state)
+
+    private fun updateProjectList(state: ProjectListViewState.DataState) {
+        updateViewsVisibility(state)
+        (projectListView as? ProjectListView)?.updateList(state.projects)
     }
 
-    private fun displayErrorDialog(appException: AppException) {
+    private fun displayErrorDialog(state: ProjectListViewState.ErrorState) {
         createInfoDialog(
             context = this,
-            titleId = appException.titleResId,
-            message = appException.getErrorMessage(this)
+            titleId = state.error.titleResId,
+            message = state.error.getErrorMessage(this),
+            positiveAction = { updateViewsVisibility(state)}
         ).show()
+    }
+
+    private fun updateViewsVisibility(state: ProjectListViewState) {
+        when (state) {
+            is ProjectListViewState.LoadingState -> {
+                projectListProgressBar.visibility = View.VISIBLE
+            }
+            is ProjectListViewState.DataState -> {
+                projectListProgressBar.visibility = View.INVISIBLE
+                projectListView.visibility = if (state.projects.isEmpty()) View.INVISIBLE
+                else View.VISIBLE
+            }
+            is ProjectListViewState.ErrorState -> {
+                projectListProgressBar.visibility = View.INVISIBLE
+                projectListView.visibility = View.INVISIBLE
+            }
+        }
     }
 
     override fun onProjectItemInteraction(item: ProjectItem) {

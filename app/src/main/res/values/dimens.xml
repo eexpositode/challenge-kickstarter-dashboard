@@ -9,4 +9,7 @@
     <dimen name="text_paragraph">18sp</dimen>
 
     <dimen name="card_view_min_height">180dp</dimen>
+
+    <dimen name="progress_bar_height_unbound">48dp</dimen>
+    <dimen name="progress_bar_height">4dp</dimen>
 </resources>

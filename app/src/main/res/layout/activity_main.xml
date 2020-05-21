@@ -13,9 +13,10 @@
         android:visibility="visible" />
 
     <include
-        android:id="@+id/projectDetailView"
-        layout="@layout/project_detail_view"
+        android:id="@+id/projectListProgressBar"
+        layout="@layout/view_progress_bar_no_margins"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/progress_bar_height"
+        android:layout_gravity="top"
         android:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

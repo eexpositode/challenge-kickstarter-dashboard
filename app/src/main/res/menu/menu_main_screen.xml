@@ -28,4 +28,11 @@
                 android:title="@string/action_sort_remain_time" />
         </menu>
     </item>
+    <item
+        android:id="@+id/actionFilterByBackers"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        android:orderInCategory="102"
+        android:title="@string/action_search"
+        app:iconTint="@color/colorOnPrimary"
+        app:showAsAction="always" />
 </menu>

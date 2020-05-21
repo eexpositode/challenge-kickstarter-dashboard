@@ -19,4 +19,5 @@
     <string name="action_sort">Sort</string>
     <string name="action_sort_alphabetically">Sort alphabetically</string>
     <string name="action_sort_remain_time">Sort by time</string>
+    <string name="action_filter_by_backers">Filter</string>
 </resources>

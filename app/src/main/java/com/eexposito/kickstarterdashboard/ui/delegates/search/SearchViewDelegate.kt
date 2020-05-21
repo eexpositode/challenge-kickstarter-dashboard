@@ -66,7 +66,7 @@ class SearchViewDelegate(
     private fun SearchView.customize(hintResId: Int) {
         findViewById<View>(androidx.appcompat.R.id.search_plate)?.apply {
             //Set search background color
-            backgroundColor = ContextCompat.getColor(context, R.color.colorBackground)
+            backgroundColor = ContextCompat.getColor(context, R.color.colorSurface)
             //Set autocomplete text and hint colors
             findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text).apply {
                 hint = context.getString(hintResId)

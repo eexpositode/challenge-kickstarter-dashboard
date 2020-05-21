@@ -18,10 +18,11 @@ class ProjectListAdapter(
     private val listener: ProjectListView.OnProjectItemInteractionListener?
 ) : RecyclerView.Adapter<ProjectListAdapter.ProjectItemViewHolder>() {
 
-    private val filterDelegate =
+    private val filterTitleDelegate =
         FilterDelegate<ProjectItem, ProjectListAdapter>(this) { item, searchString ->
             item.title.contains(searchString, ignoreCase = true)
         }
+
     private val mOnClickListener = View.OnClickListener { v ->
         (v.tag as? ProjectItem)?.let { listener?.onProjectItemInteraction(it) }
     }
@@ -31,19 +32,19 @@ class ProjectListAdapter(
     )
 
     override fun onBindViewHolder(holder: ProjectItemViewHolder, position: Int) {
-        holder.setUp(filterDelegate.filteredItemList[position], mOnClickListener)
+        holder.setUp(filterTitleDelegate.filteredItemList[position], mOnClickListener)
     }
 
-    override fun getItemCount(): Int = filterDelegate.filteredItemList.size
+    override fun getItemCount(): Int = filterTitleDelegate.filteredItemList.size
 
     fun updateData(
         updatedValues: List<ProjectItem>, onListUpdated: (List<ProjectItem>) -> Unit = {}
     ) {
-        filterDelegate.updateList(updatedValues, onListUpdated)
+        filterTitleDelegate.updateList(updatedValues, onListUpdated)
     }
 
     fun filter(textFilter: String?) {
-        filterDelegate.filter.filter(textFilter)
+        filterTitleDelegate.filter.filter(textFilter)
     }
 
     inner class ProjectItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
