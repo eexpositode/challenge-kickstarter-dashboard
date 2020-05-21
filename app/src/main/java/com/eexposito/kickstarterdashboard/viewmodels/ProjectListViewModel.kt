@@ -3,6 +3,7 @@ package com.eexposito.kickstarterdashboard.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import com.eexposito.kickstarterdashboard.api.KickstarterApiManager
+import com.eexposito.kickstarterdashboard.helpers.AppException
 import com.eexposito.kickstarterdashboard.helpers.toAppException
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -19,6 +20,7 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
 
     val projectList = projectListPublisher
         .subscribeOn(Schedulers.io())
+        .doOnSubscribe { ProjectListViewState.LoadingState }
         .toLiveData()
 
     fun fetchProjectList() = kickstarterApiManager
@@ -37,6 +39,42 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
             }
         )
         .addToComposite()
+
+    private var isSortingAscending = true
+    enum class SortMethod {
+        BY_TITLE, BY_TIME_LEFT
+    }
+
+    fun sortProjectList(sortMethod: SortMethod) = projectListPublisher
+        .subscribeOn(Schedulers.io())
+        .firstOrError()
+        .ofType(ProjectListViewState.DataState::class.java)
+        .doOnSuccess { Timber.v("SORTING") }
+        .map {
+            when(sortMethod) {
+                SortMethod.BY_TITLE -> it.sortByTitle()
+                SortMethod.BY_TIME_LEFT -> it.sortByTimeLeft()
+            }
+        }
+        .doFinally { isSortingAscending = !isSortingAscending }
+        .subscribe(
+            { projectListPublisher.onNext(it) },
+            {
+                Timber.e(it)
+                projectListPublisher.onNext(ProjectListViewState.ErrorState(it.toAppException()))
+            }
+        )
+        .addToComposite()
+
+    private fun ProjectListViewState.DataState.sortByTitle() = ProjectListViewState.DataState(
+        if (isSortingAscending) projects.sortedBy { it.title }
+        else projects.sortedByDescending { it.title }
+    )
+
+    private fun ProjectListViewState.DataState.sortByTimeLeft() = ProjectListViewState.DataState(
+        if (isSortingAscending) projects.sortedBy { it.daysLeft }
+        else projects.sortedByDescending { it.daysLeft }
+    )
 
     override fun onCleared() {
         compositeDisposable.dispose()

@@ -68,9 +68,11 @@ class MainActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.actionSearch -> true
         R.id.actionSortAlphabetically -> {
+            projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TITLE)
             true
         }
         R.id.actionSortByTime -> {
+            projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TIME_LEFT)
             true
         }
         R.id.actionFilterByBackers -> {
