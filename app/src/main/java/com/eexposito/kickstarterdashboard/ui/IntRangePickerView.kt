@@ -14,7 +14,7 @@ class IntRangePickerView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     interface OnFilterActionInteractionListener {
-        fun onFilterActionClick(intRange: IntRange)
+        fun onFilterActionClick(from: Int?, to: Int?)
         fun onVisibilityChange(isVisible: Boolean)
     }
 
@@ -23,11 +23,11 @@ class IntRangePickerView @JvmOverloads constructor(
     fun bind(listener: OnFilterActionInteractionListener) {
         onFilterActionInteractionListener = listener
         filterActionButton.onClick {
-            fromInputText.toIntOrNull()?.let { fromInt ->
-                toInputText.toIntOrNull()?.let { toInt ->
-                    onFilterActionInteractionListener?.onFilterActionClick(fromInt..toInt)
-                }
-            }
+            if (fromInputText.toIntOrNull() == null && toInputText.toIntOrNull() == null)
+                return@onClick
+            onFilterActionInteractionListener?.onFilterActionClick(
+                fromInputText.toIntOrNull(), toInputText.toIntOrNull()
+            )
         }
     }
 

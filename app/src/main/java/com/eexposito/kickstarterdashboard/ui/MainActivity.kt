@@ -19,7 +19,6 @@ import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewModel
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewState
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.view_input_int_range.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity :
@@ -143,10 +142,10 @@ class MainActivity :
         customTabsDelegate.openUrl(item.url)
     }
 
-    override fun onFilterActionClick(intRange: IntRange) {
-        projectListViewModel.filterProjectListByBackersRange(
-            fromInputText.text.toString().toInt()..toInputText.text.toString().toInt()
-        ).observe(this@MainActivity, Observer { renderProjectList(it) })
+    override fun onFilterActionClick(from: Int?, to: Int?) {
+        projectListViewModel.filterProjectListByBackersRange(from, to).observe(
+            this@MainActivity, Observer { renderProjectList(it) }
+        )
     }
 
     override fun onVisibilityChange(isVisible: Boolean) {

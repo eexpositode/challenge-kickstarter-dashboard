@@ -59,7 +59,7 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
         }
         .doFinally { isSortingAscending = !isSortingAscending }
         .doOnError { Timber.e(it) }
-        .onErrorResumeNext { error : Throwable ->
+        .onErrorResumeNext { error: Throwable ->
             Maybe.just(ProjectListViewState.ErrorState(error.toAppException()))
         }
         .toFlowable()
@@ -75,31 +75,32 @@ class ProjectListViewModel(private val kickstarterApiManager: KickstarterApiMana
         else projects.sortedByDescending { it.daysLeft }
     )
 
-    fun filterProjectListByBackersRange(range: IntRange? = null) = Flowable
+    fun filterProjectListByBackersRange(from: Int? = null, to: Int? = null) = Flowable
         .defer {
-            if (range == null)
-                projectListPublisher
-            else
-                filterProjectListByBackersRange(range)
+            when {
+                from == null && to == null -> projectListPublisher
+                from == null -> filterProjectListByBackersRange { it <= to!! }
+                to == null -> filterProjectListByBackersRange { it >= from }
+                else -> filterProjectListByBackersRange { it in from..to }
+            }
         }
         .subscribeOn(Schedulers.io())
         .toLiveData()
 
-    private fun filterProjectListByBackersRange(range: IntRange) = projectListPublisher
-        .firstOrError()
-        .ofType(ProjectListViewState.DataState::class.java)
-        .map<ProjectListViewState> { dataState ->
-            ProjectListViewState.DataState(
-                dataState.projects.filter {
-                    it.backers.toIntOrNull()?.let { backers -> backers in range } ?: false
-                }
-            )
-        }
-        .doOnError { Timber.e(it) }
-        .onErrorResumeNext { error : Throwable ->
-            Maybe.just(ProjectListViewState.ErrorState(error.toAppException()))
-        }
-        .toFlowable()
+    private fun filterProjectListByBackersRange(comparison: (Int) -> Boolean) =
+        projectListPublisher
+            .firstOrError()
+            .ofType(ProjectListViewState.DataState::class.java)
+            .map<ProjectListViewState> { dataState ->
+                ProjectListViewState.DataState(dataState.projects.filter { projectItem ->
+                    projectItem.backers.toIntOrNull()?.let { comparison(it) } ?: false
+                })
+            }
+            .doOnError { Timber.e(it) }
+            .onErrorResumeNext { error: Throwable ->
+                Maybe.just(ProjectListViewState.ErrorState(error.toAppException()))
+            }
+            .toFlowable()
 
     override fun onCleared() {
         compositeDisposable.dispose()
