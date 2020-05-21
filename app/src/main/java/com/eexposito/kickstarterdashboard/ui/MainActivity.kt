@@ -8,7 +8,6 @@ import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.eexposito.kickstarterdashboard.R
 import com.eexposito.kickstarterdashboard.helpers.CustomTabsDelegate
@@ -24,7 +23,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity :
     SearchHostMediatorActivity(),
-    ProjectListView.OnProjectItemInteractionListener {
+    ProjectListView.OnProjectItemInteractionListener,
+    IntRangePickerView.OnFilterActionInteractionListener {
 
     private val projectListViewModel: ProjectListViewModel by viewModel()
     private lateinit var customTabsDelegate: CustomTabsDelegate
@@ -42,6 +42,7 @@ class MainActivity :
             )
         }
         (projectListView as? ProjectListView)?.bind(this)
+        (projectListInputFilter as? IntRangePickerView)?.bind(this)
         projectListViewModel.run {
             fetchProjectList()
             projectList.observe(this@MainActivity, Observer { renderProjectList(it) })
@@ -79,33 +80,10 @@ class MainActivity :
             true
         }
         R.id.actionFilterByBackers -> {
-            switchInputFilterWidgetVisibility()
+            (projectListInputFilter as? IntRangePickerView)?.switchVisibility()
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    fun onFilterButtonClick(view: View) {
-        if (fromInputText.text.isBlank())
-            return
-        if (toInputText.text.isBlank())
-            return
-        projectListViewModel.filterProjectListByBackersRange(
-            fromInputText.text.toString().toInt()..toInputText.text.toString().toInt()
-        ).observe(this@MainActivity, Observer { renderProjectList(it) })
-    }
-
-    private fun switchInputFilterWidgetVisibility() {
-        if (projectListInputFilter.isVisible) {
-            projectListViewModel.filterProjectListByBackersRange().observe(
-                this@MainActivity, Observer { renderProjectList(it) }
-            )
-            projectListInputFilter.visibility = View.GONE
-        } else {
-            projectListInputFilter.visibility = View.VISIBLE
-            fromInputText.text = null
-            toInputText.text = null
-        }
     }
 
     override fun onBackPressed() {
@@ -162,5 +140,18 @@ class MainActivity :
 
     override fun onProjectItemInteraction(item: ProjectItem) {
         customTabsDelegate.openUrl(item.url)
+    }
+
+    override fun onFilterActionClick(intRange: IntRange) {
+        projectListViewModel.filterProjectListByBackersRange(
+            fromInputText.text.toString().toInt()..toInputText.text.toString().toInt()
+        ).observe(this@MainActivity, Observer { renderProjectList(it) })
+    }
+
+    override fun onVisibilityChange(isVisible: Boolean) {
+        if (!isVisible)
+            projectListViewModel.filterProjectListByBackersRange().observe(
+                this@MainActivity, Observer { renderProjectList(it) }
+            )
     }
 }
