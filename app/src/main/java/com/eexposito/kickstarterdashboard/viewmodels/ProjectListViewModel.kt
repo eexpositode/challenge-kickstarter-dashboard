@@ -22,4 +22,5 @@ class ProjectListViewModel(kickstarterApiManager: KickstarterApiManager) : ViewM
         }
         .toFlowable(BackpressureStrategy.BUFFER)
         .toLiveData()
+
 }

@@ -22,11 +22,16 @@
     </style>
     <style name="Text.OnSurface.Header">
         <item name="android:textSize">@dimen/text_header</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
     <style name="Text.OnSurface.SubHeader">
         <item name="android:textSize">@dimen/text_sub_header</item>
     </style>
     <style name="Text.OnSurface.Paragraph">
         <item name="android:textSize">@dimen/text_paragraph</item>
+    </style>
+    <style name="Text.OnSurface.Paragraph.Label">
+        <item name="android:textSize">@dimen/text_paragraph</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

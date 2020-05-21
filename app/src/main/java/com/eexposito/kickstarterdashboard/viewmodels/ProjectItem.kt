@@ -1,12 +1,21 @@
 package com.eexposito.kickstarterdashboard.viewmodels
 
 import com.eexposito.kickstarterdashboard.api.Project
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.DateTimeTz
+import java.text.NumberFormat
+import java.util.*
 
 data class ProjectItem(private val project: Project) {
     val title = project.title
-    //TODO Format currency
-    val pledge = project.amtPledged.toString()
+    val pledge = NumberFormat.getCurrencyInstance()
+        .apply {
+            maximumFractionDigits = 2
+            currency = Currency.getInstance("USD")
+        }
+        .format(project.amtPledged)!!
     val backers = project.numBackers
-    //TODO Use Datetime to calculate time left
-    val daysLeft = project.endTime
+    val daysLeft = DateTimeTz.nowLocal()
+        .minus(DateTime.fromString(project.endTime))
+        .days.toInt().toString()
 }

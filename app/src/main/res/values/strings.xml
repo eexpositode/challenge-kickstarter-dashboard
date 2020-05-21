@@ -8,4 +8,8 @@
 
     <string name="dialog_positive_button">OK</string>
     <string name="dialog_negative_button">Cancel</string>
+
+    <string name="project_item_pledge_label">Pledge</string>
+    <string name="project_item_backers_label">Backers</string>
+    <string name="project_item_days_left_label">No. of days to go</string>
 </resources>

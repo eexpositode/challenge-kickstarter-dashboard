@@ -48,7 +48,6 @@ dependencies {
     // Moshi for JSON to POJO parsing
     implementation "com.squareup.moshi:moshi:$moshi_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
     // ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
@@ -60,6 +59,12 @@ dependencies {
     implementation "org.koin:koin-android-viewmodel:$koin_version"
     // Material Components
     implementation 'com.google.android.material:material:1.1.0'
+    // RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    // CardView
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    // Klock - Date library
+    implementation "com.soywiz.korlibs.klock:klock-jvm:1.7.3"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'

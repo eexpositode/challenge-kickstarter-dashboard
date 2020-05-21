@@ -1,40 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/colorSurface">
+    android:background="@color/colorBackground">
 
-    <TextView
-        android:id="@+id/projectTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        tools:text="Polygons | The Flat 4-in-1 Measuring Spoon"
-        style="@style/Text.OnSurface.Header"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_small"
+        app:cardBackgroundColor="@color/colorSurface"
+        app:cardCornerRadius="5dp">
 
-    <TextView
-        android:id="@+id/projectPledge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        tools:text="$577844"
-        style="@style/Text.OnSurface.Paragraph" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_small"
+            android:minHeight="@dimen/card_view_min_height">
 
-    <TextView
-        android:id="@+id/projectBackers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        tools:text="74405"
-        style="@style/Text.OnSurface.Paragraph"  />
+            <TextView
+                android:id="@+id/projectTitle"
+                style="@style/Text.OnSurface.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/projectPledge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Polygons | The Flat 4-in-1 Measuring Spoon"/>
 
-    <TextView
-        android:id="@+id/projectDaysLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        tools:text="21"
-        style="@style/Text.OnSurface.Paragraph" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/projectPledgeLabel"
+                style="@style/Text.OnSurface.Paragraph.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/project_item_pledge_label"
+                app:layout_constraintBottom_toTopOf="@id/projectBackers"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/projectTitle" />
+
+            <TextView
+                android:id="@+id/projectPledge"
+                style="@style/Text.OnSurface.Paragraph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@+id/projectPledgeLabel"
+                app:layout_constraintStart_toEndOf="@+id/projectPledgeLabel"
+                app:layout_constraintTop_toTopOf="@+id/projectPledgeLabel"
+                tools:text="$577844" />
+
+            <TextView
+                android:id="@+id/projectBackersLabel"
+                style="@style/Text.OnSurface.Paragraph.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/project_item_backers_label"
+                app:layout_constraintBottom_toTopOf="@id/projectDaysLeft"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/projectPledge" />
+
+            <TextView
+                android:id="@+id/projectBackers"
+                style="@style/Text.OnSurface.Paragraph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@+id/projectBackersLabel"
+                app:layout_constraintStart_toEndOf="@+id/projectBackersLabel"
+                app:layout_constraintTop_toTopOf="@+id/projectBackersLabel"
+                tools:text="74405" />
+
+            <TextView
+                android:id="@+id/projectDaysLeftLabel"
+                style="@style/Text.OnSurface.Paragraph.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/projectBackers"
+                android:text="@string/project_item_days_left_label" />
+
+            <TextView
+                android:id="@+id/projectDaysLeft"
+                style="@style/Text.OnSurface.Paragraph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@+id/projectDaysLeftLabel"
+                app:layout_constraintStart_toEndOf="@+id/projectDaysLeftLabel"
+                app:layout_constraintTop_toTopOf="@+id/projectDaysLeftLabel"
+                tools:text="21" />
+
+            <ImageView
+                android:id="@+id/projectActionIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_right_black_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:tint="@color/colorOnSurface"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
