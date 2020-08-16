@@ -37,7 +37,7 @@ class ProjectRepository(
         .subscribe()
 
     private fun List<ProjectApiModel>.toProjectEntities() = this
-        // TODO This error need to be catched when parsing the JSON
+        // TODO This error need to be catch when parsing the JSON
         .filter { it.numBackers.toIntOrNull() != null }
         .map { apiModel ->
             with(apiModel) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -14,20 +15,21 @@ import com.eexposito.kickstarterdashboard.helpers.CustomTabsDelegate
 import com.eexposito.kickstarterdashboard.helpers.createInfoDialog
 import com.eexposito.kickstarterdashboard.helpers.forceSoftKeyboardHiding
 import com.eexposito.kickstarterdashboard.helpers.setColorResId
-import com.eexposito.kickstarterdashboard.ui.delegates.search.SearchHostMediatorActivity
+import com.eexposito.kickstarterdashboard.ui.delegates.search.SearchViewDelegate
 import com.eexposito.kickstarterdashboard.viewmodels.ProjectItem
-import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewModel
-import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewState
+import com.eexposito.kickstarterdashboard.viewmodels.ProjectsViewModel
+import com.eexposito.kickstarterdashboard.viewmodels.ProjectsViewState
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity :
-    SearchHostMediatorActivity(),
+    AppCompatActivity(),
     ProjectListView.OnProjectItemInteractionListener,
     IntRangePickerView.OnFilterActionInteractionListener {
 
-    private val projectListViewModel: ProjectListViewModel by viewModel()
     private lateinit var customTabsDelegate: CustomTabsDelegate
+    private val projectsViewModel: ProjectsViewModel by viewModel()
+    private var searchViewDelegate : SearchViewDelegate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +45,9 @@ class MainActivity :
         }
         (projectListView as? ProjectListView)?.bind(this)
         (projectListInputFilter as? IntRangePickerView)?.bind(this)
-        projectListViewModel.run {
-            fetchProjectList()
-            projectList.observe(this@MainActivity, Observer { renderProjectList(it) })
+        projectsViewModel.run {
+            fetchProjects()
+            projects.observe(this@MainActivity, Observer { renderProjectList(it) })
         }
     }
 
@@ -55,12 +57,16 @@ class MainActivity :
         menuInflater.inflate(R.menu.menu_main_screen, menu)
         // Set overflow menu items icons visible
         (menu as? MenuBuilder)?.setOptionalIconsVisible(true)
-        // Associate search_client configuration with the SearchView
         menu.findItem(R.id.actionSearch).let { actionSearchMenuItem ->
-            registerSearchViewDelegate(
-                actionSearchMenuItem.actionView as SearchView,
-                componentName,
-                R.string.search_project_hint
+            searchViewDelegate = SearchViewDelegate(
+                componentName = componentName,
+                hintResId = R.string.search_project_hint,
+                onSearchRequested = { searchString ->
+                    projectsViewModel.searchProjects(searchString).observe(
+                        this@MainActivity, Observer { renderProjectList(it) }
+                    )
+                },
+                searchView = actionSearchMenuItem.actionView as SearchView
             )
             actionSearchMenuItem.isVisible = true
         }
@@ -70,12 +76,12 @@ class MainActivity :
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.actionSearch -> true
         R.id.actionSortAlphabetically -> {
-            projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TITLE)
+            projectsViewModel.sortProjects(ProjectsViewModel.SortMethod.BY_TITLE)
                 .observe(this@MainActivity, Observer { renderProjectList(it) })
             true
         }
         R.id.actionSortByTime -> {
-            projectListViewModel.sortProjectList(ProjectListViewModel.SortMethod.BY_TIME_LEFT)
+            projectsViewModel.sortProjects(ProjectsViewModel.SortMethod.BY_TIME_LEFT)
                 .observe(this@MainActivity, Observer { renderProjectList(it) })
             true
         }
@@ -87,32 +93,32 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        if (shouldConsumeBackPressedEvent())
+        if (searchViewDelegate?.shouldConsumeBackPressedEvent() == true)
             return
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         super.onBackPressed()
     }
 
     override fun onPause() {
-        unregisterSearchViewDelegate()
+        searchViewDelegate?.onPause()
         super.onPause()
     }
 
-    private fun renderProjectList(viewState: ProjectListViewState) = when (viewState) {
-        is ProjectListViewState.LoadingState -> renderLoadingState(viewState)
-        is ProjectListViewState.DataState -> updateProjectList(viewState)
-        is ProjectListViewState.ErrorState -> displayErrorDialog(viewState)
+    private fun renderProjectList(viewState: ProjectsViewState) = when (viewState) {
+        is ProjectsViewState.LoadingState -> renderLoadingState(viewState)
+        is ProjectsViewState.DataState -> updateProjectList(viewState)
+        is ProjectsViewState.ErrorState -> displayErrorDialog(viewState)
     }
 
-    private fun renderLoadingState(state: ProjectListViewState.LoadingState) =
+    private fun renderLoadingState(state: ProjectsViewState.LoadingState) =
         updateViewsVisibility(state)
 
-    private fun updateProjectList(state: ProjectListViewState.DataState) {
+    private fun updateProjectList(state: ProjectsViewState.DataState) {
         updateViewsVisibility(state)
         (projectListView as? ProjectListView)?.updateList(state.projects)
     }
 
-    private fun displayErrorDialog(state: ProjectListViewState.ErrorState) {
+    private fun displayErrorDialog(state: ProjectsViewState.ErrorState) {
         createInfoDialog(
             context = this,
             titleId = state.error.titleResId,
@@ -121,17 +127,17 @@ class MainActivity :
         ).show()
     }
 
-    private fun updateViewsVisibility(state: ProjectListViewState) {
+    private fun updateViewsVisibility(state: ProjectsViewState) {
         when (state) {
-            is ProjectListViewState.LoadingState -> {
+            is ProjectsViewState.LoadingState -> {
                 projectListProgressBar.visibility = View.VISIBLE
             }
-            is ProjectListViewState.DataState -> {
+            is ProjectsViewState.DataState -> {
                 projectListProgressBar.visibility = View.INVISIBLE
                 projectListView.visibility = if (state.projects.isEmpty()) View.INVISIBLE
                 else View.VISIBLE
             }
-            is ProjectListViewState.ErrorState -> {
+            is ProjectsViewState.ErrorState -> {
                 projectListProgressBar.visibility = View.INVISIBLE
                 projectListView.visibility = View.INVISIBLE
             }
@@ -143,14 +149,14 @@ class MainActivity :
     }
 
     override fun onFilterActionClick(from: Int?, to: Int?) {
-        projectListViewModel.filterProjectListByBackersRange(from, to).observe(
+        projectsViewModel.filterProjectsByBackersRange(from, to).observe(
             this@MainActivity, Observer { renderProjectList(it) }
         )
     }
 
     override fun onVisibilityChange(isVisible: Boolean) {
         if (!isVisible) {
-            projectListViewModel.filterProjectListByBackersRange().observe(
+            projectsViewModel.filterProjectsByBackersRange().observe(
                 this@MainActivity, Observer { renderProjectList(it) }
             )
             forceSoftKeyboardHiding()

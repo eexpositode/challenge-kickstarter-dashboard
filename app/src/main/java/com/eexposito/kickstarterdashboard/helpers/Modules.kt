@@ -1,6 +1,6 @@
 package com.eexposito.kickstarterdashboard.helpers
 
-import com.eexposito.kickstarterdashboard.viewmodels.ProjectListViewModel
+import com.eexposito.kickstarterdashboard.viewmodels.ProjectsViewModel
 import com.eexposito.kickstarterdashboard.api.KickstarterApiManager
 import com.eexposito.kickstarterdashboard.persistence.AppDatabase
 import com.eexposito.kickstarterdashboard.repositories.ProjectRepository
@@ -10,7 +10,7 @@ import org.koin.android.viewmodel.dsl.viewModel
 
 val appModule = module {
 
-    viewModel { ProjectListViewModel(get()) }
+    viewModel { ProjectsViewModel(get()) }
     single { KickstarterApiManager(androidApplication()) }
     single { ProjectRepository(get(), get())}
 }

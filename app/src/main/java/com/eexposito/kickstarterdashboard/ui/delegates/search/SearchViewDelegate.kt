@@ -14,10 +14,10 @@ import org.jetbrains.anko.hintTextColor
 import org.jetbrains.anko.textColor
 
 class SearchViewDelegate(
-    private val searchHostComponent: SearchHostComponent,
-    private val searchView: SearchView,
     private val componentName: ComponentName,
-    private val hintResId: Int
+    private val hintResId: Int,
+    private val onSearchRequested: (String) -> Unit,
+    private val searchView: SearchView
 ) {
 
     init {
@@ -33,10 +33,9 @@ class SearchViewDelegate(
                 override fun onQueryTextSubmit(query: String): Boolean = true
 
                 override fun onQueryTextChange(query: String): Boolean {
-                    searchHostComponent.onSearchRequested(query)
+                    onSearchRequested(query)
                     return false
                 }
-
             })
         }
     }
