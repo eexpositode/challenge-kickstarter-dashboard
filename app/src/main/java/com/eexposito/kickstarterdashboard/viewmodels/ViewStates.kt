@@ -4,8 +4,8 @@ import com.eexposito.kickstarterdashboard.helpers.AppException
 
 interface ViewState
 
-sealed class ProjectListViewState : ViewState {
-    object LoadingState : ProjectListViewState()
-    data class DataState(val projects: List<ProjectItem>) : ProjectListViewState()
-    data class ErrorState(val error: AppException) : ProjectListViewState()
+sealed class ProjectsViewState : ViewState {
+    object LoadingState : ProjectsViewState()
+    data class DataState(val projects: List<ProjectItem>) : ProjectsViewState()
+    data class ErrorState(val error: AppException) : ProjectsViewState()
 }
