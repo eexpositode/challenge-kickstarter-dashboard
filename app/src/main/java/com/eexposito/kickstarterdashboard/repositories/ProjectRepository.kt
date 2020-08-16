@@ -21,15 +21,17 @@ class ProjectRepository(
     private fun fetchProjectsFromApi() = Observable
         .interval(0, 3, TimeUnit.MINUTES, Schedulers.io())
         .doOnNext { fetchAndStoreProjects() }
-        .doOnError { Timber.e(it) }
         .subscribeOn(Schedulers.io())
         .subscribe()
 
     private fun fetchAndStoreProjects() = kickstarterApiManager
         .fetchProjectList()
         .flatMapCompletable {
-            Completable.fromCallable { projectDao.insertProjects(it.toProjectEntities()) }
+            Completable
+                .fromCallable { projectDao.insertProjects(it.toProjectEntities()) }
+                .subscribeOn(Schedulers.io())
         }
+        .doOnError { Timber.e(it) }
         .onErrorComplete()
         .subscribeOn(Schedulers.io())
         .subscribe()
